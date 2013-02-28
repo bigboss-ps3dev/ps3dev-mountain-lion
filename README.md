@@ -119,48 +119,11 @@ sudo port install autoconf automake bison flex texinfo ncurses wget libelf zlib 
 <dt>3) Open a new terminal and go to work directory</dt>
 cd /usr/local/cell/work
 <dt>4) Run build.sh script for sony</dt>
+
 ./build.sh sony
 
-You must overwrite some files choosing A option you can see following output for your reference:
 
-Build Sony's toolchain and SDK 3.60...
-
-Decompressing Sony's SDK 3.60...
-
-replace /usr/local/cell/host-win32/Cg/lib/libcgc_x64.lib? [y]es, [n]o, [A]ll, [N]one, [r]ename: A
-
-Decompressing Sony's SDK 3.60 Samples...
-
-replace /usr/local/cell/info/Bugfix_SDK_e.txt? [y]es, [n]o, [A]ll, [N]one, [r]ename: A
-
-Decompressing Sony's SDK 3.60 Doc if it is available...
-
-replace /usr/local/cell/SDK_doc/en/html/C_and_C++_standard_libraries/algorith.html? [y]es, [n]o, [A]ll, [N]one, [r]ename: A
-
-Decompressing Sony's Toolchain sources...
-
-...
-...
-
-a lot of logs lines :P
-
-Toolchain and SDK installed. Have a lot of fun...
-
-Making backup of mk directory
-
-...
-...
-a few logs more
-
-Patching sdk makefiles to use gcc linker instead of snsys and using new host-osx directory for compiler and tools
-
-patching file sdk.makedef-ppu-gcc.mk
-
-patching file sdk.makedef-prx.mk
-
-patching file sdk.makedef.mk
-
-Creating /usr/local/cell/host-osx/bin directory with custom wine command for tools not availables on toolchain sources
+You must overwrite some files choosing A option asked with propmt 
 
 <dt>5) Wait until finish</dt>
 </dl>
