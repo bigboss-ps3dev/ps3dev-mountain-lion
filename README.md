@@ -123,11 +123,59 @@ cd /usr/local/cell/work
 ./build.sh sony
 
 
-You must overwrite some files choosing A option asked with propmt 
+<p>You must overwrite some files choosing A option asked with propmt </p>
+
 
 <dt>5) Wait until finish</dt>
 </dl>
  
+You can test your new toolchain compiling some sample for example
+
+cd /usr/local/cell/work
+You will need profile variables
+. ./sce_profile
+cd $CELL_SDK/samples/sdk/usbd/usbdesc
+make
+ 
+<p>This sample is compiled natively in osx, only when elf is linked it will call  ppu-lv2-prx-fixup wine wrapper.
+This tool is used to fix lib stub counts and some other things (you have a source example of this part for elf files and --stub-fix-only option implemented if you like to know what is Sony doing when it is calling this tool from linker, i lose some time making it but prx use other options that i have not implemented yet so for this,  wrapper is enabled)</p>
+
+Making fself for DEX  is using a wine wrapper  if you have a legal native solution for osx share sources for it
+ 
+Sample output:
+
+bigmini:usbdesc bigboss$ pwd
+
+/usr/local/cell/samples/sdk/usbd/usbdesc
+
+bigmini:usbdesc bigboss$ ls
+
+Makefile	main.c		readme_e.txt	readme_j.txt	usbdesc.vcproj
+
+bigmini:usbdesc bigboss$ make
+
+/usr/local/cell/host-osx/ppu/bin/ppu-lv2-gcc -c -g -O2  -std=c99 -W -Wall -Wuninitialized -Wcomment -Wchar-subscripts -Wdeprecated-declarations -Wendif-labels -Wformat=2 -Wformat-extra-args -Wimplicit -Wimport -Winline -Wmissing-braces -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wshadow -Wsign-compare -Wswitch -Wunknown-pragmas -Wunused -Wwrite-strings -Wmain -Wbad-function-cast -Wmissing-declarations -Wnested-externs -Wstrict-prototypes -Wmissing-prototypes  -I/usr/local/cell/target/ppu/include/cell/usbd   -DCELL_DATA_DIR=\"/usr/local/cell/sample_data\" -Wp,-MMD,objs/main.ppu.d,-MT,objs/main.ppu.o -o objs/main.ppu.o main.c
+
+/usr/local/cell/host-osx/ppu/bin/ppu-lv2-g++ -mno-sn-ld  objs/main.ppu.o -lusbd_stub -lsysmodule_stub -lsysutil_stub -o sample.elf
+
+calling ppu-lv2-prx-fixup with --stub-fix-only sample.elf
+
+finished ppu-lv2-prx-fixup process with 0
+
+/usr/local/cell/host-osx/bin/make_fself sample.elf sample.self
+
+calling make_fself with sample.elf sample.self
+
+fixme:msvcrt:MSVCRT__sopen_s : pmode 0x01c0 ignored
+
+finished make_fself process with 0
+
+bigmini:usbdesc bigboss$ ls
+
+Makefile	objs		readme_j.txt	sample.self
+main.c		readme_e.txt	sample.elf	usbdesc.vcproj
+
+
 ===================
   How do I use it to build homebrew toolchain?
 ===================
