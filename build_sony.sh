@@ -35,7 +35,7 @@ echo "Decompressing Sony's SDK 3.60..."
 unzip -qq $CELL_SDK/work/sdk/[78]-PS3_SDK-360_001.zip -d  /usr/local
 unzip -qq $CELL_SDK/work/sdk/[159]-PS3_SDK-360_002.zip -d  /usr/local
 echo "Decompressing Sony's SDK 3.60 Samples..."
-unzip -qq $CELL_SDK/work/sdk/[166]-PS3_SDK_Samples-360_001.zip /usr/local
+unzip -qq $CELL_SDK/work/sdk/[166]-PS3_SDK_Samples-360_001.zip -d /usr/local
 echo "Decompressing Sony's SDK 3.60 Doc if it is available..."
 if [ -f $CELL_SDK/work/sdk/[28]-PS3_SDKDoc-360_01-CHM-English.zip ]
 then
