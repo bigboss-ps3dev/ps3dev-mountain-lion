@@ -87,24 +87,35 @@ sudo port install autoconf automake bison flex texinfo ncurses wget libelf zlib 
 <dt>1) Get Sony SDK 3.60 full</dt>
  google for it or if you are a Sony PlayStation licensee get it from scedev.net as usual
 <dt>2) You will need to put some files on /usr/local/cell/work/sdk this directory is not in my repo, don't upload illegal stuff to github please. </dt>
-	These files are mandatory put on /usr/local/cell/work/sdk if you have other names change the script build_sony.sh or change filenames.
-    *[159]-PS3_SDK-360_002.zip 
-    *[166]-PS3_SDK_Samples-360_001.zip
-    *[78]-PS3_SDK-360_001.zip
-    *toolchain-src-3.6.0-GCC411.zip
 
-    These files are optional put on /usr/local/cell/work/sdk
-    *[28]-PS3_SDKDoc-360_01-CHM-English.zip
-    *[29]-PS3_SDKDoc-360_01-Help2-English.zip
-    *[30]-PS3_SDKDoc-360_01-HTML-English.zip
-    *[31]-PS3_SDKDoc-360_01-Latest-English.zip
+ These files are mandatory put on /usr/local/cell/work/sdk if you have other names change the script build_sony.sh or change filenames:
+ 
+ <ul>
+ <li>[159]-PS3_SDK-360_002.zip </li>
+ <li>[166]-PS3_SDK_Samples-360_001.zip</li>
+ <li>[78]-PS3_SDK-360_001.zip</li>
+ <li>toolchain-src-3.6.0-GCC411.zip</li>
+ </ul>
 
-    These files are not needed to build toolchain but you can use them with wine to work with your PlayStation 3 DEX 
-    *[84]-SNCPPUToolchainforPlayStation3v360.1.zip not needed to build toolchain
-    *[85]-ProDGforPlayStation3v360.2.0.exe not needed to build toolchain
-    *[86]-TargetManagerForPlayStation3v360.2.0.exe not needed to build toolchain
-    *[87]-TunerforPS3v360.2.0.exe not needed to build toolchain 
-	
+ These files are optional put on /usr/local/cell/work/sdk
+ 
+ <ul>
+ <li>[28]-PS3_SDKDoc-360_01-CHM-English.zip</li>
+ <li>[29]-PS3_SDKDoc-360_01-Help2-English.zip</li>
+ <li>[30]-PS3_SDKDoc-360_01-HTML-English.zip</li>
+ <li>[31]-PS3_SDKDoc-360_01-Latest-English.zip</li>
+</ul>
+
+ These files are not needed to build toolchain but you can use them with wine to work with your PlayStation 3 DEX 
+ 
+ <ul>
+ <li>[84]-SNCPPUToolchainforPlayStation3v360.1.zip</li>
+ <li>[85]-ProDGforPlayStation3v360.2.0.exe</li>
+ <li>[86]-TargetManagerForPlayStation3v360.2.0.exe</li>
+ <li>[87]-TunerforPS3v360.2.0.exe</li>
+</ul>
+
+
 <dt>3) Open a new terminal and go to work directory</dt>
 cd /usr/local/cell/work
 <dt>4) Run build.sh script for sony</dt>
