@@ -1,0 +1,52 @@
+diff -Naur mk/sdk.makedef-ppu-gcc.mk mk_osx/sdk.makedef-ppu-gcc.mk
+--- mk/sdk.makedef-ppu-gcc.mk	2011-03-04 15:59:58.000000000 +0100
++++ mk_osx/sdk.makedef-ppu-gcc.mk	2013-01-12 21:32:20.000000000 +0100
+@@ -52,7 +52,7 @@
+ GCC_PPU_MACHINE_OPTION  =
+ GCC_PPU_MDFLAGS         =
+ 
+-GCC_PPU_LDFLAGS         =
++GCC_PPU_LDFLAGS         = -mno-sn-ld 
+ GCC_PPU_LOADLIBS        =
+ GCC_PPU_LDLIBS          =
+ GCC_PPU_LDLIBDIR        =
+diff -Naur mk/sdk.makedef-prx.mk mk_osx/sdk.makedef-prx.mk
+--- mk/sdk.makedef-prx.mk	2011-03-04 15:59:58.000000000 +0100
++++ mk_osx/sdk.makedef-prx.mk	2013-01-12 21:34:54.000000000 +0100
+@@ -9,14 +9,14 @@
+ # PRX
+ #----------------------------------------------------------------------
+ 
+-PPU_PRX_CCLD            = $(PPU_PREFIX)gcc -mprx
+-PPU_PRX_CXXLD           = $(PPU_PREFIX)g++ -mprx
++PPU_PRX_CCLD            = $(PPU_PREFIX)gcc -mprx -mno-sn-ld 
++PPU_PRX_CXXLD           = $(PPU_PREFIX)g++ -mprx -mno-sn-ld 
+ 
+ PPU_PRX_FIXUP           = $(CELL_HOST_BIN_PATH)/ppu-lv2-prx-fixup
+ PPU_PRX_LIBGEN          = $(CELL_HOST_BIN_PATH)/ppu-lv2-prx-libgen
+ PPU_PRX_STRIP           = $(CELL_HOST_BIN_PATH)/ppu-lv2-prx-strip
+-PPU_PRX_ENLARGE         = $(CELL_HOST_BIN_PATH)/ppu-lv2-prx-enlargeprx
+-
++#PPU_PRX_ENLARGE         = $(CELL_HOST_BIN_PATH)/ppu-lv2-prx-enlargeprx
++PPU_PRX_ENLARGE         = echo $* 
+ PPU_PRX_LOADLIBS        =
+ PPU_PRX_LDLIBS          =
+ PPU_PRX_LDLIBDIR        =
+diff -Naur mk/sdk.makedef.mk mk_osx/sdk.makedef.mk
+--- mk/sdk.makedef.mk	2011-03-04 15:59:58.000000000 +0100
++++ mk_osx/sdk.makedef.mk	2013-01-12 21:39:53.000000000 +0100
+@@ -24,9 +24,12 @@
+     CELL_DATA_DIR   ?= $(CELL_SDK)/sample_data
+     EXE_SUFFIX      =
+ else
+-    CELL_HOST_PATH  = $(CELL_SDK)/host-win32
++    #CELL_HOST_PATH  = $(CELL_SDK)/host-win32
+ 	# delete drive letter
+-	CELL_DATA_DIR   ?= $(shell echo $(CELL_SDK) | sed s/^.://)/sample_data
++	#CELL_DATA_DIR   ?= $(shell echo $(CELL_SDK) | sed s/^.://)/sample_data
++	CELL_HOST_PATH  = $(CELL_SDK)/host-osx
++    CELL_DATA_DIR   ?= $(CELL_SDK)/sample_data
++    EXE_SUFFIX      =
+ endif
+ 
+ CELL_TARGET_PATH    = $(CELL_SDK)/target

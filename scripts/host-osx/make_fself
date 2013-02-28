@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# PLAYSTATION(R)3 Wrapper for host tools 360.001 for osx
+#
+#
+# Copyright (C) 2013 Antonio Jose Ramos Marquez aka bigboss
+# All Rights Reserved.
+# Modify it as you need
+
+echo calling make_fself with $*
+#wine path variable
+WINE_BIN_CMD=/opt/local/bin/wine
+
+
+$WINE_BIN_CMD $CELL_SDK/host-win32/bin/make_fself.exe $*  2>&1 
+
+echo finished make_fself process with $?
