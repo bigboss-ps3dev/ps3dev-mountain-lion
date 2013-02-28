@@ -198,7 +198,7 @@ cd /usr/local/cell/work
 
 
 ===================
-How to load samples to PS2 CEX and DEX
+How to load samples to PS3 CEX and DEX?
 ===================
 
 TODO
