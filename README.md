@@ -132,10 +132,15 @@ cd /usr/local/cell/work
 You can test your new toolchain compiling some sample for example
 
 cd /usr/local/cell/work
+
 You will need profile variables
+
 . ./sce_profile
+
 cd $CELL_SDK/samples/sdk/usbd/usbdesc
+
 make
+
  
 <p>This sample is compiled natively in osx, only when elf is linked it will call  ppu-lv2-prx-fixup wine wrapper.
 This tool is used to fix lib stub counts and some other things (you have a source example of this part for elf files and --stub-fix-only option implemented if you like to know what is Sony doing when it is calling this tool from linker, i lose some time making it but prx use other options that i have not implemented yet so for this,  wrapper is enabled)</p>
