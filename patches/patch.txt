@@ -1,0 +1,198 @@
+diff -Naur src/binutils/bfd/binary.c src_osx/binutils/bfd/binary.c
+--- src/binutils/bfd/binary.c	2010-10-06 16:44:06.000000000 +0200
++++ src_osx/binutils/bfd/binary.c	2013-01-12 18:20:03.000000000 +0100
+@@ -134,7 +134,7 @@
+ mangle_name (bfd *abfd, char *suffix)
+ {
+   /* binary_symbol_prefix is defined in objcopy.c */
+-  extern char *binary_symbol_prefix __attribute__((weak));
++  char *binary_symbol_prefix;
+   bfd_size_type size;
+   char *buf;
+   char *p;
+diff -Naur src/binutils/bfd/cpu-powerpc.c src_osx/binutils/bfd/cpu-powerpc.c
+--- src/binutils/bfd/cpu-powerpc.c	2006-11-04 04:59:10.000000000 +0100
++++ src_osx/binutils/bfd/cpu-powerpc.c	2013-01-12 18:17:24.000000000 +0100
+@@ -344,4 +344,4 @@
+ 
+ };
+ 
+-extern const bfd_arch_info_type bfd_powerpc_arch __attribute__((__alias__("bfd_powerpc_archs")));
++extern const bfd_arch_info_type bfd_powerpc_arch __attribute__((weak,__alias__("bfd_powerpc_archs")));
+diff -Naur src/binutils/bfd/elf64-ppc-spu.c src_osx/binutils/bfd/elf64-ppc-spu.c
+--- src/binutils/bfd/elf64-ppc-spu.c	2009-07-23 09:34:10.000000000 +0200
++++ src_osx/binutils/bfd/elf64-ppc-spu.c	2013-01-12 18:21:51.000000000 +0100
+@@ -184,7 +184,7 @@
+ #define RELA_SH_INDEX		5
+ 
+ /* binary_symbol_prefix is defined in objcopy.c */
+-extern char *binary_symbol_prefix __attribute__((weak));
++char *binary_symbol_prefix;
+ static char sym_prefix[] = "_binary_";
+ 
+ /* Create a ppc64_spu object.  Invoked via bfd_set_format.  */
+diff -Naur src/build-osx.sh src_osx/build-osx.sh
+--- src/build-osx.sh	1970-01-01 01:00:00.000000000 +0100
++++ src_osx/build-osx.sh	2013-01-12 18:23:43.000000000 +0100
+@@ -0,0 +1,13 @@
++#! /bin/csh
++# SCE CONFIDENTIAL
++# Copyright(C) 2010 Sony Computer Entertainment Inc.
++# All Rights Reserved.
++
++# This script builds the following toolchain for SDK3.6.0-GCC411.
++#  ppu-lv2, spu-lv2
++# See each build script for details.
++
++
++# building on osx leopard by bigboss 2013
++$0:h/build-ppu-lv2-osx.sh || exit 1
++$0:h/build-spu-lv2-osx.sh || exit 1
+diff -Naur src/build-ppu-lv2-osx.sh src_osx/build-ppu-lv2-osx.sh
+--- src/build-ppu-lv2-osx.sh	1970-01-01 01:00:00.000000000 +0100
++++ src_osx/build-ppu-lv2-osx.sh	2013-01-12 18:23:27.000000000 +0100
+@@ -0,0 +1,69 @@
++#! /bin/csh
++# SCE CONFIDENTIAL
++# Copyright(C) 2010 Sony Computer Entertainment Inc.
++# All Rights Reserved.
++
++# This script builds and installs ppu-lv2 toolchain for SDK3.6.0-GCC411.  The
++# existing toolchain directory is backed up as "host-linux/ppu.~N~" where
++# N is a generated number.
++# If environment variable CELLSDK is set, it should be the directory where
++# SDK is installed.  The default is "/usr/local/cell".
++# If environment variable CELLDIR is set, it is used as an installation
++# target.  The default is the same directory as CELLSDK.
++# If environment variable TOOLCHAIN_BUILDDIR is set, it is used as a working
++# directory to build the toolchain.  The default is the current working
++# directory.
++
++# common settings
++
++if( ! $?CELLSDK ) setenv CELLSDK /usr/local/cell
++if( ! $?CELLDIR ) setenv CELLDIR $CELLSDK
++setenv SRC `cd $0:h; echo $cwd`
++if( $?TOOLCHAIN_BUILDDIR ) then
++  if( -d $TOOLCHAIN_BUILDDIR ) cd $TOOLCHAIN_BUILDDIR
++endif
++
++# ppu-lv2 settings
++
++setenv TOOLCHAIN_PREFIX $CELLDIR/host-osx/ppu
++setenv TOOLCHAIN_SYSROOT $CELLSDK/target/ppu
++set path = ($TOOLCHAIN_PREFIX/bin $path)
++
++# build & install
++
++if( -e $TOOLCHAIN_PREFIX ) then
++  set backup_n=1
++  while( -e $TOOLCHAIN_PREFIX.~${backup_n}~ )
++    @ backup_n++
++  end
++  set backup =  $TOOLCHAIN_PREFIX.~${backup_n}~
++  mkdir $backup || exit 1
++  (cd $TOOLCHAIN_PREFIX/ && tar cf - .) | (cd $backup && tar xf -) || exit 1
++endif
++
++mkdir -p ppu-lv2/binutils || exit 1
++cd ppu-lv2/binutils || exit 1
++$SRC/binutils/configure --target=ppu-lv2 --prefix=$TOOLCHAIN_PREFIX \
++    --disable-werror --host=x86_64-apple-darwin12.2.1	--with-sysroot=$TOOLCHAIN_SYSROOT   || exit 1
++make || exit 1
++make install || exit 1
++rehash
++cd ../..
++
++mkdir -p ppu-lv2/gcc || exit 1
++cd ppu-lv2/gcc || exit 1
++$SRC/gcc/configure --target=ppu-lv2 --prefix=$TOOLCHAIN_PREFIX \
++    --disable-werror --host=x86_64-apple-darwin12.2.1 --with-sysroot=$TOOLCHAIN_SYSROOT --with-headers \
++	--disable-shared --enable-languages="c,c++" || exit 1
++make || exit 1
++make install || exit 1
++rehash
++# Remove the headers that conflict with dinkumware
++set inc = `ppu-lv2-gcc -print-file-name=include`
++foreach h (float.h math.h spe.h stdbool.h stdlib.h varargs.h iso646.h \
++	stddef.h syslimits.h limits.h stdarg.h stdio.h)
++  rm -f $inc/$h || exit 1
++end
++cd ../..
++
++cp -f $SRC/gcc/COPYING{,.LIB} $TOOLCHAIN_PREFIX/ || exit 1
+diff -Naur src/build-spu-lv2-osx.sh src_osx/build-spu-lv2-osx.sh
+--- src/build-spu-lv2-osx.sh	1970-01-01 01:00:00.000000000 +0100
++++ src_osx/build-spu-lv2-osx.sh	2013-01-12 18:23:36.000000000 +0100
+@@ -0,0 +1,71 @@
++#! /bin/csh
++# SCE CONFIDENTIAL
++# Copyright(C) 2010 Sony Computer Entertainment Inc.
++# All Rights Reserved.
++
++# This script builds and installs spu-lv2 toolchain for SDK3.6.0-GCC411.  The
++# existing toolchain directory is backed up as "host-linux/spu.~N~" where
++# N is a generated number.
++# If environment variable CELLSDK is set, it should be the directory where
++# SDK is installed.  The default is "/usr/local/cell".
++# If environment variable CELLDIR is set, it is used as an installation
++# target.  The default is the same directory as CELLSDK.
++# If environment variable TOOLCHAIN_BUILDDIR is set, it is used as a working
++# directory to build the toolchain.  The default is the current working
++# directory.
++
++# common settings
++
++if( ! $?CELLSDK ) setenv CELLSDK /usr/local/cell
++if( ! $?CELLDIR ) setenv CELLDIR $CELLSDK
++setenv SRC `cd $0:h; echo $cwd`
++if( $?TOOLCHAIN_BUILDDIR ) then
++  if( -d $TOOLCHAIN_BUILDDIR ) cd $TOOLCHAIN_BUILDDIR
++endif
++
++# spu-lv2 settings
++
++setenv TOOLCHAIN_PREFIX $CELLDIR/host-osx/spu
++setenv TOOLCHAIN_SYSROOT $CELLSDK/target/spu
++set path = ($TOOLCHAIN_PREFIX/bin $path)
++
++# build & install
++
++if( -e $TOOLCHAIN_PREFIX ) then
++  set backup_n=1
++  while( -e $TOOLCHAIN_PREFIX.~${backup_n}~ )
++    @ backup_n++
++  end
++  set backup =  $TOOLCHAIN_PREFIX.~${backup_n}~
++  mkdir $backup || exit 1
++  (cd $TOOLCHAIN_PREFIX/ && tar cf - .) | (cd $backup && tar xf -) || exit 1
++endif
++
++mkdir -p spu-lv2/binutils || exit 1
++cd spu-lv2/binutils || exit 1
++setenv CFLAGS "-DBPA -O2 -g"
++$SRC/binutils/configure --target=spu-lv2 --prefix=$TOOLCHAIN_PREFIX \
++    --disable-werror --host=x86_64-apple-darwin12.2.1 --with-sysroot=$TOOLCHAIN_SYSROOT || exit 1
++unsetenv CFLAGS
++make || exit 1
++make install || exit 1
++rehash
++cd ../..
++
++mkdir -p spu-lv2/gcc || exit 1
++cd spu-lv2/gcc || exit 1
++$SRC/gcc/configure --target=spu-lv2 --prefix=$TOOLCHAIN_PREFIX \
++	--disable-werror --host=x86_64-apple-darwin12.2.1 --with-sysroot=$TOOLCHAIN_SYSROOT --with-headers \
++	--disable-threads --disable-shared --enable-languages="c,c++" || exit 1
++make || exit 1
++make install || exit 1
++rehash
++# Remove the headers that conflict with dinkumware
++set inc = `spu-lv2-gcc -print-file-name=include`
++foreach h (float.h math.h stdbool.h stdlib.h varargs.h iso646.h \
++	stddef.h syslimits.h limits.h stdarg.h stdio.h)
++  rm -f $inc/$h || exit 1
++end
++cd ../..
++
++cp -f $SRC/gcc/COPYING{,.LIB} $TOOLCHAIN_PREFIX/ || exit 1
