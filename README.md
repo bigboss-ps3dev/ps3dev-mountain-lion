@@ -185,4 +185,20 @@ main.c		readme_e.txt	sample.elf	usbdesc.vcproj
   How do I use it to build homebrew toolchain?
 ===================
 
+<dl>
+<dt>1) Open a new terminal</dt>
+
+cd /usr/local/cell/work
+
+<dt>2) Run build.sh for ps3dev </dt>
+./build.sh ps3dev
+
+<dt>3) Wait until finish ignore errors in last lib NoRSX</dt>
+</dl>
+
+
+===================
+How to load samples to PS2 CEX and DEX
+===================
+
 TODO
