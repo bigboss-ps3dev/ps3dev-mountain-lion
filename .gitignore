@@ -9,3 +9,4 @@ build/
 sdk/
 src/
 ps3dev/
+.DS_Store

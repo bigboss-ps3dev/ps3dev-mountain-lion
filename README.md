@@ -73,7 +73,7 @@ sudo port install autoconf automake bison flex texinfo ncurses wget libelf zlib 
  
  cd /usr/local/cell/work
  
- git clone https://github.com/bigboss-ps3dev/ps3dev-mountain-lion.git
+ git clone https://github.com/bigboss-ps3dev/ps3dev-mountain-lion.git .
  
  <dt>11) Install a good and light editor</dt>
  
